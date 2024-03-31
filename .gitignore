@@ -1,0 +1,11 @@
+# Environment files
+.env
+
+# Build files for go
+*.exe
+*.test
+*.prof
+*.out
+
+# Local development files
+.vscode
