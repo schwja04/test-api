@@ -11,6 +11,7 @@ import (
 	"github.com/schwja04/test-api/api/contracts"
 	"github.com/schwja04/test-api/application/commands"
 	"github.com/schwja04/test-api/application/handlers"
+	"github.com/schwja04/test-api/infrastructure/factories"
 	"github.com/schwja04/test-api/infrastructure/repositories"
 )
 
