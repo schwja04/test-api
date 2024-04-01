@@ -10,3 +10,17 @@ services:
       - "8080:${API_PORT}"
     volumes:
       - ./:/app
+    depends_on:
+      - db
+  db:
+    image: postgres:16.2
+    hostname: my-postgres
+    restart: always
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
+    ports:
+      - "5432:${PG_PORT}"

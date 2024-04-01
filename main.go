@@ -22,7 +22,10 @@ func main() {
 
 	router := gin.Default()
 
-	todoRepo := repositories.NewToDoInMemoryRepository()
+	connectionFactory := factories.NewPostgresConnectionFactory("postgres://postgres:postgres@my-postgres:5432/todo_db")
+	defer connectionFactory.Close()
+
+	todoRepo := repositories.NewToDoPostgresRepository(connectionFactory)
 	addHandler := handlers.NewAddToDoHandler(todoRepo)
 	deleteHandler := handlers.NewDeleteToDoHandler(todoRepo)
 	getSingleHandler := handlers.NewGetSingleToDoHandler(todoRepo)
