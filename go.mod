@@ -2,13 +2,6 @@ module github.com/schwja04/test-api
 
 go 1.22.1
 
-replace (
-	github.com/schwja04/test-api/api => ./api
-	github.com/schwja04/test-api/application => ./application
-	github.com/schwja04/test-api/domain => ./domain
-	github.com/schwja04/test-api/infrastructure => ./infrastructure
-)
-
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.6.0
