@@ -5,9 +5,9 @@ import (
 
 	"github.com/google/uuid"
 
-	repoAbstractions "github.com/schwja04/test-api/application/abstractions/repositories"
-	domain_models "github.com/schwja04/test-api/domain"
-	"github.com/schwja04/test-api/infrastructure/factories"
+	repoAbstractions "github.com/schwja04/test-api/internal/application/abstractions/repositories"
+	domain_models "github.com/schwja04/test-api/internal/domain"
+	"github.com/schwja04/test-api/internal/infrastructure/factories"
 )
 
 type ToDoPostgresRepository struct {

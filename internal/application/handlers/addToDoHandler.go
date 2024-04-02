@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/schwja04/test-api/application/abstractions/repositories"
-	"github.com/schwja04/test-api/application/commands"
-	"github.com/schwja04/test-api/domain"
+	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
+	"github.com/schwja04/test-api/internal/application/commands"
+	"github.com/schwja04/test-api/internal/domain"
 )
 
 type AddToDoHandler struct {

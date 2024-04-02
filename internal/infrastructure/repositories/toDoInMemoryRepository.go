@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/uuid"
 
-	repoAbstractions "github.com/schwja04/test-api/application/abstractions/repositories"
-	domain_models "github.com/schwja04/test-api/domain"
+	repoAbstractions "github.com/schwja04/test-api/internal/application/abstractions/repositories"
+	domain_models "github.com/schwja04/test-api/internal/domain"
 )
 
 type ToDoInMemoryRepository struct {

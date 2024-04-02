@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/google/uuid"
-	"github.com/schwja04/test-api/application/abstractions/repositories"
+	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
 )
 
 type DeleteToDoHandler struct {

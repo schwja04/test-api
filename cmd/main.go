@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
-	"github.com/schwja04/test-api/api/contracts"
-	"github.com/schwja04/test-api/application/commands"
-	"github.com/schwja04/test-api/application/handlers"
-	"github.com/schwja04/test-api/infrastructure/factories"
-	"github.com/schwja04/test-api/infrastructure/repositories"
+	"github.com/schwja04/test-api/internal/api/contracts"
+	"github.com/schwja04/test-api/internal/application/commands"
+	"github.com/schwja04/test-api/internal/application/handlers"
+	"github.com/schwja04/test-api/internal/infrastructure/factories"
+	"github.com/schwja04/test-api/internal/infrastructure/repositories"
 )
 
 func main() {

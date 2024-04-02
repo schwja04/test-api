@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"github.com/google/uuid"
-	domain_models "github.com/schwja04/test-api/domain"
+	domain_models "github.com/schwja04/test-api/internal/domain"
 )
 
 type IToDoRepository interface {

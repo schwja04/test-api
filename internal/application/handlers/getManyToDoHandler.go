@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/schwja04/test-api/application/abstractions/repositories"
-	"github.com/schwja04/test-api/domain"
+	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
+	"github.com/schwja04/test-api/internal/domain"
 )
 
 type GetManyToDoHandler struct {

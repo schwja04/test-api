@@ -3,8 +3,8 @@ package handlers
 import (
 	"time"
 
-	"github.com/schwja04/test-api/application/abstractions/repositories"
-	"github.com/schwja04/test-api/application/commands"
+	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
+	"github.com/schwja04/test-api/internal/application/commands"
 )
 
 type UpdateToDoHandler struct {
