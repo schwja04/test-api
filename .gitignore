@@ -7,6 +7,9 @@
 *.prof
 *.out
 
+# System files
+.DS_Store
+
 # Local development files
 .vscode
 postgres-data
