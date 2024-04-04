@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:1
+    hostname: jaeger
+    restart: always
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=debug
+    ports:
+      - 4317:4317
+      - 16686:16686

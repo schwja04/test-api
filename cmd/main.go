@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,12 +12,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
 	routes "github.com/schwja04/test-api/internal/api"
 	"github.com/schwja04/test-api/internal/api/controllers"
 	"github.com/schwja04/test-api/internal/application/handlers"
 	"github.com/schwja04/test-api/internal/infrastructure/factories"
 	"github.com/schwja04/test-api/internal/infrastructure/repositories"
+	"github.com/schwja04/test-api/packages/otel"
 )
 
 func main() {
@@ -30,6 +33,16 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	providerShutdown, err := otel.InitTraceProvider(ctx, false)
+	if err != nil {
+		log.Warning(fmt.Errorf("failed initializing otel trace provider: %w", err))
+	}
+	defer func() {
+		if err := providerShutdown(ctx); err != nil {
+			log.Warning(fmt.Errorf("failed shutting down otel trace provider: %w", err))
+		}
+	}()
 
 	// Repository Dependencies
 	connectionFactory := factories.NewPostgresConnectionFactory("postgres://postgres:postgres@my-postgres:5432/todo_db")
@@ -51,6 +64,11 @@ func main() {
 
 	// API
 	router := gin.Default()
+	router.Use(
+		gin.Recovery(),
+		otelgin.Middleware("todo-app"),
+		otel.DatadogFriendlyOtelMapping(),
+	)
 	RegisterToDoRoutes(router, todoController)
 
 	apiPort := os.Getenv("API_PORT")

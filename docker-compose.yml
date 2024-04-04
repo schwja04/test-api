@@ -6,6 +6,10 @@ services:
       target: dev
       dockerfile: Dockerfile
     working_dir: /app
+    environment:
+    - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_HOST}:${OTEL_PORT}
+    - OTEL_RESOURCE_ATTRIBUTES=service.name=${APP_NAME}
+    - OTEL_PROPAGATORS=tracecontext,baggage
     ports:
       - "8080:${API_PORT}"
     volumes:
