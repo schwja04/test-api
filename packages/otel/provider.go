@@ -3,6 +3,7 @@ package otel
 import (
 	"context"
 	"fmt"
+	"os"
 	"regexp"
 
 	"go.opentelemetry.io/otel"
@@ -20,7 +21,7 @@ var (
 	Tracer trace.Tracer
 )
 
-func InitTraceProvider(ctx context.Context, exportConsole bool) (func(context.Context) error, error) {
+func InitTraceProvider(ctx context.Context, tracerName string, exportConsole bool) (func(context.Context) error, error) {
 
 	var processor sdktrace.SpanProcessor
 	var returnConn *grpc.ClientConn = nil
@@ -32,7 +33,7 @@ func InitTraceProvider(ctx context.Context, exportConsole bool) (func(context.Co
 		}
 		processor = sdktrace.NewBatchSpanProcessor(exporter)
 	} else {
-		endpoint := "jaeger:4317" // os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
+		endpoint := os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
 		if endpoint == "" {
 			endpoint = "localhost:4317"
 		} else {
@@ -77,7 +78,7 @@ func InitTraceProvider(ctx context.Context, exportConsole bool) (func(context.Co
 	otel.SetTracerProvider(provider)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
-	Tracer = provider.Tracer("todo-app")
+	Tracer = provider.Tracer(tracerName)
 
 	return providerShutdown(returnConn, provider), nil
 }

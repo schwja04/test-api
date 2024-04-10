@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -14,12 +15,14 @@ import (
 	log "github.com/sirupsen/logrus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
-	routes "github.com/schwja04/test-api/internal/api"
 	"github.com/schwja04/test-api/internal/api/controllers"
+	"github.com/schwja04/test-api/internal/api/routes"
 	"github.com/schwja04/test-api/internal/application/handlers"
-	"github.com/schwja04/test-api/internal/infrastructure/factories"
+	"github.com/schwja04/test-api/internal/infrastructure/postgres/builders"
+	"github.com/schwja04/test-api/internal/infrastructure/postgres/factories"
 	"github.com/schwja04/test-api/internal/infrastructure/repositories"
 	"github.com/schwja04/test-api/packages/otel"
+	ginOtelMiddleware "github.com/schwja04/test-api/packages/otel/gin"
 )
 
 func main() {
@@ -34,7 +37,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	providerShutdown, err := otel.InitTraceProvider(ctx, false)
+	providerShutdown, err := otel.InitTraceProvider(ctx, "todo-api", false)
 	if err != nil {
 		log.Warning(fmt.Errorf("failed initializing otel trace provider: %w", err))
 	}
@@ -44,8 +47,28 @@ func main() {
 		}
 	}()
 
+	// I don't like this implementation, but default values should not be set in the builder
+	// I could push it as a string and parse it in the builder, but it would be unexpected that the builder
+	// would throw an error if the value is not a valid integer, AT LEAST IN THE CURRENT IMPLEMENTATION.
+	pgPort := 5432
+	if os.Getenv("PG_PORT") != "" {
+		parsedPgPort, err := strconv.Atoi(os.Getenv("PG_PORT"))
+		if err != nil {
+			log.Fatal("PG_PORT is not a valid integer")
+		}
+		pgPort = parsedPgPort
+	}
+
+	connectionString := builders.NewConnectionStringBuilder().
+		WithUser(os.Getenv("PG_USER")).
+		WithPassword(os.Getenv("PG_PASSWORD")).
+		WithHost(os.Getenv("PG_HOST")).
+		WithPort(pgPort).
+		WithDatabase(os.Getenv("PG_DATABASE")).
+		Build()
+
 	// Repository Dependencies
-	connectionFactory := factories.NewPostgresConnectionFactory("postgres://postgres:postgres@my-postgres:5432/todo_db")
+	connectionFactory := factories.NewPostgresConnectionFactory(connectionString)
 	defer connectionFactory.Close()
 
 	// Repositories
@@ -66,8 +89,8 @@ func main() {
 	router := gin.Default()
 	router.Use(
 		gin.Recovery(),
-		otelgin.Middleware("todo-app"),
-		otel.DatadogFriendlyOtelMapping(),
+		otelgin.Middleware("todo-api"),
+		ginOtelMiddleware.FriendlyOtelMapping(),
 	)
 	RegisterToDoRoutes(router, todoController)
 

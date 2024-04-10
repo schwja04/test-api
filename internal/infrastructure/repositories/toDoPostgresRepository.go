@@ -7,7 +7,7 @@ import (
 
 	repoAbstractions "github.com/schwja04/test-api/internal/application/abstractions/repositories"
 	domain_models "github.com/schwja04/test-api/internal/domain"
-	"github.com/schwja04/test-api/internal/infrastructure/factories"
+	"github.com/schwja04/test-api/internal/infrastructure/postgres/factories"
 )
 
 type ToDoPostgresRepository struct {

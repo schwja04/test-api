@@ -1,4 +1,4 @@
-package otel
+package gin
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,7 +6,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func DatadogFriendlyOtelMapping() gin.HandlerFunc {
+func FriendlyOtelMapping() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		span := trace.SpanFromContext(c.Request.Context())
 		span.SetAttributes(attribute.String("operation.name", "gin.request"))
