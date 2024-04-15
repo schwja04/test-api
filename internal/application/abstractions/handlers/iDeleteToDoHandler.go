@@ -1,7 +1,11 @@
 package handlers
 
-import "github.com/google/uuid"
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
 
 type IDeleteToDoHandler interface {
-	Handle(id uuid.UUID) error
+	Handle(ctx context.Context, id uuid.UUID) error
 }

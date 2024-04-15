@@ -18,8 +18,8 @@ type PostgresConnectionFactory struct {
 	pool             *pgxpool.Pool
 }
 
-func NewPostgresConnectionFactory(connectionString string) IConnectionFactory {
-	pool, err := pgxpool.New(context.Background(), connectionString)
+func NewPostgresConnectionFactory(ctx context.Context, connectionString string) IConnectionFactory {
+	pool, err := pgxpool.New(ctx, connectionString)
 	if err != nil {
 		log.Fatal(err)
 	}

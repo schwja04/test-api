@@ -1,7 +1,11 @@
 package handlers
 
-import "github.com/schwja04/test-api/internal/application/commands"
+import (
+	"context"
+
+	"github.com/schwja04/test-api/internal/application/commands"
+)
 
 type IUpdateToDoHandler interface {
-	Handle(command commands.UpdateToDoCommand) error
+	Handle(ctx context.Context, command commands.UpdateToDoCommand) error
 }

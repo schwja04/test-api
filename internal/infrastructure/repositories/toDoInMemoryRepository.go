@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"context"
 	"errors"
 
 	"github.com/google/uuid"
@@ -19,11 +20,11 @@ func NewToDoInMemoryRepository() repoAbstractions.IToDoRepository {
 	}
 }
 
-func (r *ToDoInMemoryRepository) Create(todo domain_models.ToDo) (uuid.UUID, error) {
+func (r *ToDoInMemoryRepository) Create(ctx context.Context, todo domain_models.ToDo) (uuid.UUID, error) {
 	return r.upsert(todo)
 }
 
-func (r *ToDoInMemoryRepository) Delete(id uuid.UUID) error {
+func (r *ToDoInMemoryRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	_, ok := r.todos[id]
 
 	if !ok {
@@ -41,7 +42,7 @@ func (r *ToDoInMemoryRepository) Delete(id uuid.UUID) error {
 	return nil
 }
 
-func (r *ToDoInMemoryRepository) Get(id uuid.UUID) (domain_models.ToDo, error) {
+func (r *ToDoInMemoryRepository) Get(ctx context.Context, id uuid.UUID) (domain_models.ToDo, error) {
 	todo, ok := r.todos[id]
 
 	if !ok {
@@ -51,7 +52,7 @@ func (r *ToDoInMemoryRepository) Get(id uuid.UUID) (domain_models.ToDo, error) {
 	return *todo, nil
 }
 
-func (r *ToDoInMemoryRepository) GetAll() ([]domain_models.ToDo, error) {
+func (r *ToDoInMemoryRepository) GetAll(ctx context.Context) ([]domain_models.ToDo, error) {
 	// convert map to slice
 	todos := make([]domain_models.ToDo, 0, len(r.todos))
 
@@ -62,7 +63,7 @@ func (r *ToDoInMemoryRepository) GetAll() ([]domain_models.ToDo, error) {
 	return todos, nil
 }
 
-func (r *ToDoInMemoryRepository) Update(todo domain_models.ToDo) error {
+func (r *ToDoInMemoryRepository) Update(ctx context.Context, todo domain_models.ToDo) error {
 	_, err := r.upsert(todo)
 
 	return err

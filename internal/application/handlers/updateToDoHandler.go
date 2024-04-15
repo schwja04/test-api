@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"time"
 
 	"github.com/schwja04/test-api/internal/application/abstractions/handlers"
@@ -16,8 +17,8 @@ func NewUpdateToDoHandler(toDoRepository repositories.IToDoRepository) handlers.
 	return &UpdateToDoHandler{toDoRepository: toDoRepository}
 }
 
-func (h *UpdateToDoHandler) Handle(command commands.UpdateToDoCommand) error {
-	todo, err := h.toDoRepository.Get(command.Id)
+func (h *UpdateToDoHandler) Handle(ctx context.Context, command commands.UpdateToDoCommand) error {
+	todo, err := h.toDoRepository.Get(ctx, command.Id)
 
 	if err != nil {
 		return err
@@ -28,7 +29,7 @@ func (h *UpdateToDoHandler) Handle(command commands.UpdateToDoCommand) error {
 	todo.AssigneeId = command.AssigneeId
 	todo.UpdatedAt = time.Now()
 
-	err = h.toDoRepository.Update(todo)
+	err = h.toDoRepository.Update(ctx, todo)
 
 	if err != nil {
 		return err

@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	"github.com/schwja04/test-api/internal/application/abstractions/handlers"
 	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
@@ -14,8 +16,8 @@ func NewDeleteToDoHandler(toDoRepository repositories.IToDoRepository) handlers.
 	return &DeleteToDoHandler{toDoRepository: toDoRepository}
 }
 
-func (h *DeleteToDoHandler) Handle(id uuid.UUID) error {
-	err := h.toDoRepository.Delete(id)
+func (h *DeleteToDoHandler) Handle(ctx context.Context, id uuid.UUID) error {
+	err := h.toDoRepository.Delete(ctx, id)
 
 	if err != nil {
 		return err

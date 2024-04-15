@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -18,7 +19,7 @@ func NewAddToDoHandler(toDoRepository repositories.IToDoRepository) handlers.IAd
 	return &AddToDoHandler{toDoRepository: toDoRepository}
 }
 
-func (h *AddToDoHandler) Handle(command commands.AddToDoCommand) (uuid.UUID, error) {
+func (h *AddToDoHandler) Handle(ctx context.Context, command commands.AddToDoCommand) (uuid.UUID, error) {
 	currentTime := time.Now()
 
 	toDo := domain.ToDo{
@@ -30,7 +31,7 @@ func (h *AddToDoHandler) Handle(command commands.AddToDoCommand) (uuid.UUID, err
 		UpdatedAt:  currentTime,
 	}
 
-	id, err := h.toDoRepository.Create(toDo)
+	id, err := h.toDoRepository.Create(ctx, toDo)
 
 	return id, err
 }

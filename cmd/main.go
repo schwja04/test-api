@@ -68,8 +68,11 @@ func main() {
 		Build()
 
 	// Repository Dependencies
-	connectionFactory := factories.NewPostgresConnectionFactory(connectionString)
+	connectionFactory := factories.NewPostgresConnectionFactory(ctx, connectionString)
 	defer connectionFactory.Close()
+
+	// CREATE TABLE IF IT DOESN'T EXIST
+	InitializeToDoTable(connectionFactory)
 
 	// Repositories
 	todoRepo := repositories.NewToDoPostgresRepository(connectionFactory)
@@ -131,4 +134,29 @@ func RegisterToDoRoutes(router *gin.Engine, controller *controllers.ToDoControll
 	router.DELETE(routes.ToDoById, controller.Delete)
 	router.GET(routes.ToDoById, controller.GetSingle)
 	router.PUT(routes.ToDoById, controller.Update)
+}
+
+func InitializeToDoTable(connFactory factories.IConnectionFactory) {
+	conn, err := connFactory.GetConnection()
+	if err != nil {
+		log.Fatal("Failed to get connection")
+	}
+	defer conn.Release()
+
+	_, err = conn.Exec(context.Background(), `
+	CREATE TABLE if not exists todos (
+		primary_id SERIAL,
+		id UUID NOT NULL,
+		title VARCHAR,
+		content VARCHAR,
+		created_at TIMESTAMP NOT NULL,
+		updated_at TIMESTAMP NOT NULL,
+		assignee_id VARCHAR,
+		primary key (primary_id),
+		unique (id)
+	)
+	`)
+	if err != nil {
+		log.Fatal("Failed to create table")
+	}
 }

@@ -36,24 +36,24 @@ func NewToDoController(
 	}
 }
 
-func (controller *ToDoController) GetMany(c *gin.Context) {
-	todos, err := controller.getManyHandler.Handle()
+func (controller *ToDoController) GetMany(ctx *gin.Context) {
+	todos, err := controller.getManyHandler.Handle(ctx)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"todos": todos})
+	ctx.JSON(http.StatusOK, gin.H{"todos": todos})
 }
 
-func (controller *ToDoController) Add(c *gin.Context) {
+func (controller *ToDoController) Add(ctx *gin.Context) {
 	var request contracts.AddToDoCommand
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -65,51 +65,51 @@ func (controller *ToDoController) Add(c *gin.Context) {
 		AssigneeId: request.AssigneeId,
 	}
 
-	id, err := controller.addHandler.Handle(command)
+	id, err := controller.addHandler.Handle(ctx, command)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	c.Status(http.StatusCreated)
-	c.Header("Location", fmt.Sprintf("%s/%s", c.Request.URL.Path, id.String()))
+	ctx.Status(http.StatusCreated)
+	ctx.Header("Location", fmt.Sprintf("%s/%s", ctx.Request.URL.Path, id.String()))
 }
 
-func (controller *ToDoController) GetSingle(c *gin.Context) {
-	todoId := c.Param("id")
+func (controller *ToDoController) GetSingle(ctx *gin.Context) {
+	todoId := ctx.Param("id")
 
 	todoUUID, err := uuid.Parse(todoId)
 
 	if err != nil {
 
-		c.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	todo, err := controller.getSingleHandler.Handle(todoUUID)
+	todo, err := controller.getSingleHandler.Handle(ctx, todoUUID)
 
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, todo)
+	ctx.JSON(http.StatusOK, todo)
 }
 
-func (controller *ToDoController) Update(c *gin.Context) {
-	todoId := c.Param("id")
+func (controller *ToDoController) Update(ctx *gin.Context) {
+	todoId := ctx.Param("id")
 
 	var request contracts.UpdateToDoCommand
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -118,7 +118,7 @@ func (controller *ToDoController) Update(c *gin.Context) {
 	todoUUID, err := uuid.Parse(todoId)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -131,39 +131,39 @@ func (controller *ToDoController) Update(c *gin.Context) {
 		AssigneeId: request.AssigneeId,
 	}
 
-	err = controller.updateHandler.Handle(command)
+	err = controller.updateHandler.Handle(ctx, command)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	c.Status(http.StatusNoContent)
-	c.Header("Location", fmt.Sprintf("%s/%s", c.Request.URL.Path, todoId))
+	ctx.Status(http.StatusNoContent)
+	ctx.Header("Location", fmt.Sprintf("%s/%s", ctx.Request.URL.Path, todoId))
 }
 
-func (controller *ToDoController) Delete(c *gin.Context) {
-	todoId := c.Param("id")
+func (controller *ToDoController) Delete(ctx *gin.Context) {
+	todoId := ctx.Param("id")
 
 	todoUUID, err := uuid.Parse(todoId)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	err = controller.deleteHandler.Handle(todoUUID)
+	err = controller.deleteHandler.Handle(ctx, todoUUID)
 
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 
-	c.Status(http.StatusNoContent)
+	ctx.Status(http.StatusNoContent)
 }
