@@ -11,20 +11,20 @@ This api exists as a mechanism to learn and test ideas while learn golang.
 
 
 ## Research Points
-[X] Gin Routing
+- [x] Gin Routing
     - Would be useful to attempt more complicated routing to test router groups
-[X] Postgres hook ups
+- [x] Postgres hook ups
     - Using the pgxpool module, I was able to implement a connection factory that supports pooling
     - Would like to push the fault tolerance of this to ensure reinitializing is not necessary
-[ ] Tracing
-    [X] Route Tracing
-    [ ] Postgres Tracing
+- [ ] Tracing
+    - [X] Route Tracing
+    - [ ] Postgres Tracing
         - Would like to test using the pgxpool interface as well as the database/sql interface
-    [ ] Http Client
+    - [ ] Http Client
         - Will need to artifically create a client, I would like it to fit within the "domain" logic of this api
         - Potentially create an implementation of the repository that uses Turso as the backing store
             - Turso is an edge sqlite database that can be interacted with using HTTP
-[X] Dockerfile and Docker Compose
+- [x] Dockerfile and Docker Compose
     - Containers for the various technologies
         - Jaeger (Tracing collector and UI)
         - Various Databases
