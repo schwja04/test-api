@@ -16,7 +16,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
 	"github.com/schwja04/test-api/internal/api/controllers"
-	"github.com/schwja04/test-api/internal/api/routes"
+	"github.com/schwja04/test-api/internal/api/routers"
 	"github.com/schwja04/test-api/internal/application/handlers"
 	"github.com/schwja04/test-api/internal/infrastructure/postgres/builders"
 	"github.com/schwja04/test-api/internal/infrastructure/postgres/factories"
@@ -95,7 +95,8 @@ func main() {
 		otelgin.Middleware("todo-api"),
 		ginOtelMiddleware.FriendlyOtelMapping(),
 	)
-	RegisterToDoRoutes(router, todoController)
+
+	routers.RegisterToDoRoutes(router, todoController)
 
 	apiPort := os.Getenv("API_PORT")
 	if apiPort == "" {
@@ -126,14 +127,6 @@ func main() {
 	}
 
 	log.Println("Server exiting")
-}
-
-func RegisterToDoRoutes(router *gin.Engine, controller *controllers.ToDoController) {
-	router.GET(routes.ToDos, controller.GetMany)
-	router.POST(routes.ToDos, controller.Add)
-	router.DELETE(routes.ToDoById, controller.Delete)
-	router.GET(routes.ToDoById, controller.GetSingle)
-	router.PUT(routes.ToDoById, controller.Update)
 }
 
 func InitializeToDoTable(connFactory factories.IConnectionFactory) {
