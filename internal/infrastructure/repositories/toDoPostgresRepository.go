@@ -6,16 +6,15 @@ import (
 
 	"github.com/google/uuid"
 
-	repoAbstractions "github.com/schwja04/test-api/internal/application/abstractions/repositories"
 	domain_models "github.com/schwja04/test-api/internal/domain"
 	"github.com/schwja04/test-api/internal/infrastructure/postgres/factories"
 )
 
 type ToDoPostgresRepository struct {
-	connectionFactory factories.IConnectionFactory
+	connectionFactory factories.IPostgresConnectionFactory
 }
 
-func NewToDoPostgresRepository(connectionFactory factories.IConnectionFactory) repoAbstractions.IToDoRepository {
+func NewToDoPostgresRepository(connectionFactory factories.IPostgresConnectionFactory) *ToDoPostgresRepository {
 	return &ToDoPostgresRepository{connectionFactory: connectionFactory}
 }
 

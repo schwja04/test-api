@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 
-	repoAbstractions "github.com/schwja04/test-api/internal/application/abstractions/repositories"
 	domain_models "github.com/schwja04/test-api/internal/domain"
 )
 
@@ -14,7 +13,7 @@ type ToDoInMemoryRepository struct {
 	todos map[uuid.UUID]*domain_models.ToDo
 }
 
-func NewToDoInMemoryRepository() repoAbstractions.IToDoRepository {
+func NewToDoInMemoryRepository() *ToDoInMemoryRepository {
 	return &ToDoInMemoryRepository{
 		todos: make(map[uuid.UUID]*domain_models.ToDo),
 	}

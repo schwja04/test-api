@@ -60,11 +60,11 @@ func main() {
 	}
 
 	connectionString := builders.NewConnectionStringBuilder().
+		WithDatabase(os.Getenv("PG_DATABASE")).
 		WithUser(os.Getenv("PG_USER")).
 		WithPassword(os.Getenv("PG_PASSWORD")).
 		WithHost(os.Getenv("PG_HOST")).
 		WithPort(pgPort).
-		WithDatabase(os.Getenv("PG_DATABASE")).
 		Build()
 
 	// Repository Dependencies
@@ -129,7 +129,7 @@ func main() {
 	log.Println("Server exiting")
 }
 
-func InitializeToDoTable(connFactory factories.IConnectionFactory) {
+func InitializeToDoTable(connFactory factories.IPostgresConnectionFactory) {
 	conn, err := connFactory.GetConnection()
 	if err != nil {
 		log.Fatal("Failed to get connection")

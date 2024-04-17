@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/schwja04/test-api/internal/application/abstractions/handlers"
 	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
 	"github.com/schwja04/test-api/internal/application/commands"
 )
@@ -13,7 +12,7 @@ type UpdateToDoHandler struct {
 	toDoRepository repositories.IToDoRepository
 }
 
-func NewUpdateToDoHandler(toDoRepository repositories.IToDoRepository) handlers.IUpdateToDoHandler {
+func NewUpdateToDoHandler(toDoRepository repositories.IToDoRepository) *UpdateToDoHandler {
 	return &UpdateToDoHandler{toDoRepository: toDoRepository}
 }
 

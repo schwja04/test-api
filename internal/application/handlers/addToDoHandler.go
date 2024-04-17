@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/schwja04/test-api/internal/application/abstractions/handlers"
 	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
 	"github.com/schwja04/test-api/internal/application/commands"
 	"github.com/schwja04/test-api/internal/domain"
@@ -15,7 +14,7 @@ type AddToDoHandler struct {
 	toDoRepository repositories.IToDoRepository
 }
 
-func NewAddToDoHandler(toDoRepository repositories.IToDoRepository) handlers.IAddToDoHandler {
+func NewAddToDoHandler(toDoRepository repositories.IToDoRepository) *AddToDoHandler {
 	return &AddToDoHandler{toDoRepository: toDoRepository}
 }
 

@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type IConnectionFactory interface {
+type IPostgresConnectionFactory interface {
 	GetConnection() (*pgxpool.Conn, error)
 	Close()
 }
@@ -18,7 +18,7 @@ type PostgresConnectionFactory struct {
 	pool             *pgxpool.Pool
 }
 
-func NewPostgresConnectionFactory(ctx context.Context, connectionString string) IConnectionFactory {
+func NewPostgresConnectionFactory(ctx context.Context, connectionString string) *PostgresConnectionFactory {
 	pool, err := pgxpool.New(ctx, connectionString)
 	if err != nil {
 		log.Fatal(err)

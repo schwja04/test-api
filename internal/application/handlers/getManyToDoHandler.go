@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 
-	"github.com/schwja04/test-api/internal/application/abstractions/handlers"
 	"github.com/schwja04/test-api/internal/application/abstractions/repositories"
 	"github.com/schwja04/test-api/internal/domain"
 )
@@ -12,7 +11,7 @@ type GetManyToDoHandler struct {
 	toDoRepository repositories.IToDoRepository
 }
 
-func NewGetManyToDoHandler(toDoRepository repositories.IToDoRepository) handlers.IGetManyToDoHandler {
+func NewGetManyToDoHandler(toDoRepository repositories.IToDoRepository) *GetManyToDoHandler {
 	return &GetManyToDoHandler{toDoRepository: toDoRepository}
 }
 
